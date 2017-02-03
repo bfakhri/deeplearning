@@ -5,6 +5,9 @@ from sample_submission import regressor
 import numpy as np
 import copy
 
+# Number of trials
+TRIALS = 25 
+
 def rmse ( a,  b ): 
     """
     This function produces a point-wise root mean squared error error between ``a`` and ``b``
@@ -73,18 +76,27 @@ class dataset_generator(object):
         return (x,y)
 
 if __name__ == '__main__':
-    
-    dg = dataset_generator(sigma = 5) # Initialize a dataset creator
-    data_train = dg.query_data(samples = 5000) # Create a random training dataset.
-    r = regressor(data_train)  # This call should return a regressor object that is fully trained.
-    params = r.get_params()    # This call should reaturn parameters of the model that are 
-                               # fully trained.
+  
+	min_alpha = float("inf")
+	min_armse = float("inf")
+	for cur_alpha in np.arange(0, 1000, 10): 
+		run_sum = 0
+		# Try many times, get the average
+		for trial in xrange(0, TRIALS):
+			dg = dataset_generator(sigma = 1.34) # Initialize a dataset creator
+			data_train = dg.query_data(samples = 500) # Create a random training dataset.
+			r = regressor(data_train, alpha=cur_alpha)  # This call should return a regressor object that is fully trained.
+			params = r.get_params()    # This call should reaturn parameters of the model that are 
+			dg.sigma = 0.001
+			data_test = dg.query_data(samples = 5000)  # Create a random testing dataset.
+			predictions = r.get_predictions(data_test[0]) # This call should return predictions.
+			cur_rmse = rmse(data_test[1], predictions)
+			run_sum = run_sum + cur_rmse
+		
+		avg_rmse = run_sum/TRIALS
+		if(avg_rmse < min_armse):
+			min_armse = avg_rmse
+			min_alpha = cur_alpha
+		print "Average rmse " + str(run_sum/TRIALS) + "\tAlpha: " + str(r.alpha)
 
-    dg2 = copy.copy(dg)
-    dg2.sigma = 200
-    print(dg2.sigma)
-    data_test = dg.query_data(samples = 5000)  # Create a random testing dataset.
-    print(data_test[0].shape)
-    print(np.std(data_test[0], 1))
-    predictions = r.get_predictions(data_test[0]) # This call should return predictions.
-    print "Rmse error of predictions = " + str(rmse(data_test[1], predictions))
+	print "Min Alpha: " + str(min_alpha) + "\tMin AvgRMSE: " + str(min_armse)

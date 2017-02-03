@@ -8,18 +8,19 @@ class regressor(object):
 		
 		dimensions: number of dimensions of dataset (optional, default randomly 15-30)
 	"""    
-	def __init__(self, train_data):
+	def __init__(self, train_data, **kwargs):
+		
+		# Regularization Param
+		if 'alpha' in kwargs.keys():
+			self.alpha = kwargs['alpha']
+		else:
+			self.alpha = 0
+		
 		X = train_data[0]
 		Y = train_data[1]
 
-		# Begin Regression
-		#m1 = np.dot(np.transpose(X), X)
-		#m2 = np.linalg.inv(m1)
-		#m3 = np.dot(m2, np.transpose(X))
-		#m4 = np.dot(m3, Y)
-		#self.w = m4
-	
-		m1 = np.dot(np.transpose(X), X) + 21.521
+		# Begin Regression	
+		m1 = np.dot(np.transpose(X), X) + np.multiply(self.alpha, np.identity(X.shape[1]))
 		m2 = np.linalg.inv(m1)
 		m3 = np.dot(m2, np.transpose(X))
 		m4 = np.dot(m3, Y)
