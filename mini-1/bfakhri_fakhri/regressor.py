@@ -1,3 +1,11 @@
+"""
+Author: Bijan Fakhri
+Date: 2/3/17
+CSE591 - Intro to Deep Learning
+
+This file implements the regressor class which performs a linear regression given some data
+"""
+
 import numpy as np
 
 class regressor(object):
