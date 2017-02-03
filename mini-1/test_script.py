@@ -79,15 +79,15 @@ if __name__ == '__main__':
   
 	min_alpha = float("inf")
 	min_armse = float("inf")
-	for cur_alpha in np.arange(-100, 100, 1): 
+	for cur_alpha in [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0]: 
 		run_sum = 0
 		# Try many times, get the average
 		for trial in xrange(0, TRIALS):
-			dg = dataset_generator(sigma = 0.3) # Initialize a dataset creator
-			data_train = dg.query_data(samples = 500) # Create a random training dataset.
-			r = regressor(data_train, alpha=cur_alpha)  # This call should return a regressor object that is fully trained.
+			dg = dataset_generator() # Initialize a dataset creator
+			data_train = dg.query_data(samples = 5000) # Create a random training dataset.
+			r = regressor(data_train)  # This call should return a regressor object that is fully trained.
 			params = r.get_params()    # This call should reaturn parameters of the model that are 
-			dg.sigma = 0.000001
+			#dg.sigma = 0.000001
 			data_test = dg.query_data(samples = 5000)  # Create a random testing dataset.
 			predictions = r.get_predictions(data_test[0]) # This call should return predictions.
 			cur_rmse = rmse(data_test[1], predictions)
