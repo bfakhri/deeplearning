@@ -1,0 +1,5 @@
+# Python c files
+*.pyc
+
+# Swap files
+*.swp
