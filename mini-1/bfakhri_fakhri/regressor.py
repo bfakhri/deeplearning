@@ -5,8 +5,8 @@ class regressor(object):
 	Class that implements a regressor. After training, it will have weights that can be exported.  
 
 	Args:
-		
-		dimensions: number of dimensions of dataset (optional, default randomly 15-30)
+		train_data: data with which to train the regressor. 
+		alpha (optional): sets the regularization parameter alpha		
 	"""    
 	def __init__(self, train_data, **kwargs):
 		
@@ -15,7 +15,8 @@ class regressor(object):
 			self.alpha = kwargs['alpha']
 		else:
 			self.alpha = 0
-		
+	
+		# Changes name of incoming data for clearer representation below	
 		X = train_data[0]
 		Y = train_data[1]
 
@@ -25,10 +26,12 @@ class regressor(object):
 		m3 = np.dot(m2, np.transpose(X))
 		m4 = np.dot(m3, Y)
 		self.w = m4
-		self.b = np.zeros(train_data[0].shape[1])
 	
 	def get_params(self):
-		return (self.w, self.b)
+		return self.w
 
 	def get_predictions(self, test_data):
 		return np.transpose(np.dot(np.transpose(self.w), np.transpose(test_data)))
+
+if __name__=='__main__':
+	pass

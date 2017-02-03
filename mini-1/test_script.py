@@ -1,7 +1,7 @@
 # Bijan Fakhri
 # will ``sample_submission`` to your submission filename.
 
-from bfakhri_fakhri import regressor
+from bfakhri_fakhri.regressor import regressor
 import numpy as np
 import copy
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
   
 	min_alpha = float("inf")
 	min_armse = float("inf")
-	for cur_alpha in np.arange(0, 2, 0.001): 
+	for cur_alpha in np.arange(-100, 100, 1): 
 		run_sum = 0
 		# Try many times, get the average
 		for trial in xrange(0, TRIALS):
